@@ -57,45 +57,45 @@ flutter:
   fonts:
   - family: RedHatDisplay
     fonts:
-      - asset: fonts/RedHatDisplay-Black.ttf
+      - asset: assets/fonts/RedHatDisplay-Black.ttf
         weight: 900
-      - asset: fonts/RedHatDisplay-BlackItalic.ttf
+      - asset: assets/fonts/RedHatDisplay-BlackItalic.ttf
         weight: 900
         style: italic
-      - asset: fonts/RedHatDisplay-ExtraBold.ttf
+      - asset: assets/fonts/RedHatDisplay-ExtraBold.ttf
         weight: 800
-      - asset: fonts/RedHatDisplay-ExtraBoldItalic.ttf
+      - asset: assets/fonts/RedHatDisplay-ExtraBoldItalic.ttf
         weight: 800
         style: italic
-      - asset: fonts/RedHatDisplay-Bold.ttf
+      - asset: assets/fonts/RedHatDisplay-Bold.ttf
         weight: 700
-      - asset: fonts/RedHatDisplay-BoldItalic.ttf
+      - asset: assets/fonts/RedHatDisplay-BoldItalic.ttf
         weight: 700
         style: italic
-      - asset: fonts/RedHatDisplay-SemiBold.ttf
+      - asset: assets/fonts/RedHatDisplay-SemiBold.ttf
         weight: 600
-      - asset: fonts/RedHatDisplay-SemiBoldItalic.ttf
+      - asset: assets/fonts/RedHatDisplay-SemiBoldItalic.ttf
         weight: 600
         style: italic
-      - asset: fonts/RedHatDisplay-Medium.ttf
+      - asset: assets/fonts/RedHatDisplay-Medium.ttf
         weight: 500
-      - asset: fonts/RedHatDisplay-MediumItalic.ttf
+      - asset: assets/fonts/RedHatDisplay-MediumItalic.ttf
         weight: 500
         style: italic
-      - asset: fonts/RedHatDisplay-Regular.ttf
+      - asset: assets/fonts/RedHatDisplay-Regular.ttf
         weight: 400
-      - asset: fonts/RedHatDisplay-Italic.ttf
+      - asset: assets/fonts/RedHatDisplay-Italic.ttf
         weight: 400
         style: italic
-      - asset: fonts/RedHatDisplay-Light.ttf
+      - asset: assets/fonts/RedHatDisplay-Light.ttf
         weight: 300
-      - asset: fonts/RedHatDisplay-LightItalic.ttf
+      - asset: assets/fonts/RedHatDisplay-LightItalic.ttf
         weight: 300
         style: italic
   
   - family: SourceCodePro
     fonts:
-      - asset: fonts/SourceCodePro-Regular.ttf
+      - asset: assets/fonts/SourceCodePro-Regular.ttf
         weight: 400
 
   # The following line ensures that the Material Icons font is
