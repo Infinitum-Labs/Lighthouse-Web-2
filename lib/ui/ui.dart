@@ -6,3 +6,4 @@ import 'package:lighthouse_web/ui/components/components.dart';
 import 'dart:html';
 
 part 'views/command_line_view.dart';
+part 'views/dev_screen.dart';
