@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lighthouse_web/ui/ui.dart';
+import 'package:lighthouse_web/ui/views/views.dart';
 import 'dart:html';
 
 void main() {
@@ -13,22 +13,14 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      //initialRoute: "splash", //initialRoute
-      routes: {
-        '/': (context) => DevScreen(),
-      },
-      theme: ThemeData(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-        fontFamily: "RedHatDisplay",
+    return Material(
+      child: Center(
+        child: Container(
+          width: 100,
+          height: 100,
+          color: Colors.red,
+        ),
       ),
-      onUnknownRoute: (settings) {
-        return MaterialPageRoute(builder: (_) => DevScreen() //Error404Page(),
-            );
-      },
-      debugShowCheckedModeBanner: false,
     );
   }
 }
