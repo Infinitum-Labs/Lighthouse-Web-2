@@ -5,6 +5,6 @@ class DevScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Atmosphere2();
+    return EmptyWidget();
   }
 }
