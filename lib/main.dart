@@ -7,18 +7,20 @@ void main() {
   window.onBeforeUnload.listen((e) {
     //corelib.DB.deinit();
   });
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return Dashboard(
       child: Center(
         child: Container(
           width: 100,
           height: 100,
-          color: Colors.red,
+          color: Colors.green,
         ),
       ),
     );

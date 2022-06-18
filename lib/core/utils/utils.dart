@@ -3,12 +3,6 @@ import 'dart:convert';
 
 final void Function() emptyCallback = () {};
 
-enum LogType {
-  log,
-  warn,
-  err,
-}
-
 class ObjectId {
   static final String _chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
   static final Random _rnd = Random();

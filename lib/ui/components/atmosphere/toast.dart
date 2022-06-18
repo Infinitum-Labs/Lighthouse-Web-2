@@ -1,7 +1,9 @@
 part of components;
 
 class Toast extends StatefulWidget {
-  const Toast({Key? key}) : super(key: key);
+  final ToastData toastData;
+  bool hasBeenShown = false;
+  Toast(this.toastData, {Key? key}) : super(key: key);
 
   @override
   State<Toast> createState() => _ToastState();
@@ -22,6 +24,24 @@ class _ToastState extends State<Toast> with SingleTickerProviderStateMixin {
       curve: Curves.easeIn,
     ),
   );
+
+  @override
+  void initState() {
+    super.initState();
+    show();
+  }
+
+  void show() {
+    widget.hasBeenShown = true;
+    controller.forward();
+    Timer(const Duration(seconds: 3), () {
+      hide();
+    });
+  }
+
+  void hide() {
+    controller.reverse();
+  }
 
   @override
   void dispose() {
