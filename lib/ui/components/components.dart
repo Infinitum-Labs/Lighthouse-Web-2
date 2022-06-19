@@ -1,4 +1,4 @@
-library components;
+library ui.components;
 
 import 'package:flutter/material.dart';
 import 'dart:async';

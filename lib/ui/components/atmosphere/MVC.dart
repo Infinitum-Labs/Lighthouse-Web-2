@@ -1,9 +1,7 @@
-part of components;
+part of ui.components;
 
 abstract class View extends StatefulWidget {
-  final Atmosphere atmosphere;
-
-  const View({required this.atmosphere, Key? key}) : super(key: key);
+  const View({Key? key}) : super(key: key);
 
   @override
   ViewController createState();
@@ -11,10 +9,11 @@ abstract class View extends StatefulWidget {
 
 abstract class ViewController<T extends View> extends State<T> {
   late ToastController toastController;
-  
+
   ViewController() {
     toastController = ToastController(this);
   }
+
   @override
   Widget build(BuildContext context);
 }

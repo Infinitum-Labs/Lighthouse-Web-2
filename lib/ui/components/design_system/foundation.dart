@@ -1,4 +1,4 @@
-part of components;
+part of ui.components;
 
 /// [`FoundationColor`](https://github.com) refers to the core brand colors of Lighthouse,
 /// which are named according to the [IDS Color Palette Naming Format](https://github.com).

@@ -1,4 +1,4 @@
-part of components;
+part of ui.components;
 
 class EmptyWidget extends StatelessWidget {
   const EmptyWidget({Key? key}) : super(key: key);

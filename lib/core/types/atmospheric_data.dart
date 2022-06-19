@@ -1,4 +1,4 @@
-part of types;
+part of core.types;
 
 class ToastData {
   final String title;

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:convert';
+import '../types/types.dart';
 
 final void Function() emptyCallback = () {};
 
@@ -23,4 +24,12 @@ class Base64Url {
       base64Url.encode(utf8.encode(jsonEncode(obj)));
   static dynamic decode(String encodedString) =>
       utf8.decode(base64Url.decode(encodedString));
+}
+
+/// A utility class that contains all scripts, no matter how different, that
+/// generate Dart code.
+class CodegenScripts {
+  static String lhObjClassFromJson(JSON json) {
+    return '';
+  }
 }

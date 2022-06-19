@@ -1,4 +1,4 @@
-part of views;
+part of ui.views;
 
 class DevScreen extends StatelessWidget {
   DevScreen({Key? key}) : super(key: key);

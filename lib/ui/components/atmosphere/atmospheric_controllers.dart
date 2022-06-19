@@ -1,10 +1,11 @@
-part of components;
+part of ui.components;
 
 class Atmosphere extends StatefulWidget {
-  late ViewController viewController;
+  final ViewController viewController;
   final Widget lithosphere;
 
-  Atmosphere({
+  const Atmosphere({
+    required this.viewController,
     required this.lithosphere,
     Key? key,
   }) : super(key: key);
@@ -57,6 +58,16 @@ class _AtmosphereState extends State<Atmosphere> {
               ),
               Stack(
                 children: [
+                  if (widget
+                      .viewController.toastController.toastQueue.isNotEmpty)
+                    Positioned(
+                      left: -340,
+                      top: 0,
+                      child: Toast(
+                        widget.viewController.toastController.toastQueue.first,
+                        key: UniqueKey(),
+                      ),
+                    ),
                   // Atmospheric Widgets
                 ],
               ),
@@ -82,6 +93,10 @@ class ToastController {
 
   void clearToastQueue() {
     toastQueue.removeWhere((ToastData t) => t.hasBeenShown == true);
+  }
+
+  void refresh() {
+    clearToastQueue();
   }
 }
 

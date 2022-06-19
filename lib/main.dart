@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:lighthouse_web/ui/components/components.dart';
+import 'package:lighthouse_web/core/data_handling/data_handling.dart';
 import 'package:lighthouse_web/ui/views/views.dart';
 import 'dart:html';
 
 void main() {
   window.document.onContextMenu.listen((e) => e.preventDefault());
-  window.onBeforeUnload.listen((e) {
-    //corelib.DB.deinit();
-  });
+  window.onBeforeUnload.listen((e) {});
+  //bool initialisedIdbFactory = Store.init();
+
   runApp(const App());
 }
 
@@ -16,16 +16,18 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dashboard(
-      atmosphere: Atmosphere(
-        lithosphere: Center(
-          child: Container(
-            width: 100,
-            height: 100,
-            color: Colors.green,
-          ),
-        ),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/launch',
+      onUnknownRoute: (RouteSettings settings) {},
+      routes: <String, WidgetBuilder>{
+        '/': (BuildContext context) {
+          return const LaunchScreen();
+        },
+        '/launch': (BuildContext context) {
+          return const LaunchScreen();
+        }
+      },
     );
   }
 }

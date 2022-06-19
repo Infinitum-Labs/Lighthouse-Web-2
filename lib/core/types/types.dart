@@ -1,6 +1,7 @@
-library types;
+library core.types;
 
-import 'package:flutter/scheduler.dart';
+import 'dart:html';
 
-part './controller_interchange_formats/atmosphericData.dart';
-part './util_types/util_types.dart';
+part './atmospheric_data.dart';
+part './util_types.dart';
+part './lighthouse_objects.dart';
