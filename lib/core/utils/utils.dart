@@ -1,8 +1,20 @@
+library core.utils;
+
 import 'dart:math';
 import 'dart:convert';
 import '../types/types.dart';
+import 'dart:io';
+
+part './logging.dart';
 
 final void Function() emptyCallback = () {};
+final JSON emptyRequestMap = {
+  'headers': {
+    'auth': {'jwt': ''},
+    'slug': ''
+  },
+  'body': {'payload': {}}
+};
 
 class ObjectId {
   static final String _chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
@@ -32,4 +44,9 @@ class CodegenScripts {
   static String lhObjClassFromJson(JSON json) {
     return '';
   }
+}
+
+extension EnumUtils on Enum {
+  String get string =>
+      toString().replaceAll("${toString().split('.')[0]}.", '');
 }

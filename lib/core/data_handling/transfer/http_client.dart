@@ -1,20 +1,19 @@
 part of core.data_handling;
 
-class RequestObject {
-  final Map<String, dynamic> jsonData;
+class HttpClient {
+  static const String baseUrl =
+      "https://infinitumlabsinc.editorx.io/lighthousecloud/_functions/";
 
-  RequestObject([this.jsonData = const {}]);
+  static Future<ResponseObject> get(RequestObject requestObject) async {
+    return http.get(
+      Uri.parse(baseUrl + 'auth'), // requestObject.slug.string
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ${requestObject.jwtString}',
+      },
+    ).then((http.Response response) {
+      return ResponseObject(
+        jsonDecode(response.body),
+      );
+    });
+  }
 }
-
-class ResponseObject {
-  final Map<String, dynamic> jsonData;
-
-  ResponseObject([this.jsonData = const {}]);
-
-  int get statusCode => jsonData['body']['status']['code'];
-  String get statusMsg => jsonData['body']['status']['msg'];
-  String get jwtString => jsonData['headers']['auth']['jwt'];
-  Map<String, dynamic> get payload => jsonData['body']['payload'];
-}
-
-class HttpClient {}

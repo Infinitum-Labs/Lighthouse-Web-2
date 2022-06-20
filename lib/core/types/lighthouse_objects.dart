@@ -5,7 +5,7 @@ part of core.types;
 ////////////////////
 
 abstract class LighthouseObject {
-  final Map<String, dynamic> json;
+  final JSON json;
 
   const LighthouseObject(this.json);
 
@@ -17,11 +17,11 @@ abstract class LighthouseObject {
 }
 
 abstract class CoreObject extends LighthouseObject {
-  const CoreObject(Map<String, dynamic> json) : super(json);
+  const CoreObject(JSON json) : super(json);
 }
 
 abstract class SubObject extends LighthouseObject {
-  const SubObject(Map<String, dynamic> json) : super(json);
+  const SubObject(JSON json) : super(json);
 }
 
 ////////////////////
@@ -29,7 +29,7 @@ abstract class SubObject extends LighthouseObject {
 ////////////////////
 
 class Workbench extends CoreObject {
-  const Workbench(Map<String, dynamic> json) : super(json);
+  const Workbench(JSON json) : super(json);
 
   List<String> get projects => json['projects'];
 }
@@ -39,5 +39,5 @@ class Workbench extends CoreObject {
 ////////////////////
 
 class Context extends SubObject {
-  const Context(Map<String, dynamic> json) : super(json);
+  const Context(JSON json) : super(json);
 }

@@ -7,6 +7,7 @@ class LaunchScreen extends View {
 }
 
 class _LaunchScreenVC extends ViewController<LaunchScreen> {
+  late String response;
   bool dataImportTriggered = false;
   bool loading = false;
   late String username;
@@ -15,7 +16,24 @@ class _LaunchScreenVC extends ViewController<LaunchScreen> {
   @override
   Widget build(BuildContext context) {
     if (loading && !dataImportTriggered) {
-      HttpClient();
+      dataImportTriggered = true;
+      Logger.log('Preparing to fetch');
+      HttpClient.get(
+        RequestObject(emptyRequestMap)
+          ..setSlug(Slug.auth)
+          ..setJwtString('NONE')
+          ..setPayload({
+            'username': username,
+            'password': password,
+          }),
+      ).then((ResponseObject responseObject) {
+        Logger.log(responseObject.jsonData, this);
+        setState(() {
+          response = responseObject.toString();
+          Logger.log(response, this);
+          loading = false;
+        });
+      });
     }
     toastController.refresh();
     return Atmosphere(
@@ -23,7 +41,7 @@ class _LaunchScreenVC extends ViewController<LaunchScreen> {
       lithosphere: Stack(
         alignment: Alignment.center,
         children: [
-          if (!loading)
+          if (!loading && !dataImportTriggered)
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -48,9 +66,11 @@ class _LaunchScreenVC extends ViewController<LaunchScreen> {
             ),
           if (loading)
             Center(
-              child: Text(
-                'Launching app... as\n$username\n$password',
-              ),
+              child: Text('Launching app... as\n$username\n$password'),
+            ),
+          if (!loading && dataImportTriggered)
+            Center(
+              child: Text(response),
             ),
         ],
       ),

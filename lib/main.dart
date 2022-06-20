@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lighthouse_web/core/data_handling/data_handling.dart';
+import 'package:lighthouse_web/core/core.dart';
 import 'package:lighthouse_web/ui/views/views.dart';
 import 'dart:html';
 
@@ -7,7 +7,8 @@ void main() {
   window.document.onContextMenu.listen((e) => e.preventDefault());
   window.onBeforeUnload.listen((e) {});
   //bool initialisedIdbFactory = Store.init();
-
+  Logger.init();
+  Logger.log("LOGFILE INITIALISED", main);
   runApp(const App());
 }
 
