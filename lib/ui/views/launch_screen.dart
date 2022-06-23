@@ -1,7 +1,8 @@
 part of ui.views;
 
 class LaunchScreen extends View {
-  const LaunchScreen({Key? key}) : super(key: key);
+  const LaunchScreen(ViewConfigs viewConfigs, {Key? key})
+      : super(viewConfigs, key: key);
   @override
   ViewController<LaunchScreen> createState() => _LaunchScreenVC();
 }
@@ -17,7 +18,7 @@ class _LaunchScreenVC extends ViewController<LaunchScreen> {
   Widget build(BuildContext context) {
     if (loading && !dataImportTriggered) {
       dataImportTriggered = true;
-      Logger.log('Preparing to fetch');
+      widget.viewConfigs.debugConfigs?.logger.log('Preparing to fetch');
       HttpClient.get(
         RequestObject(emptyRequestMap)
           ..setSlug(Slug.auth)
@@ -27,10 +28,11 @@ class _LaunchScreenVC extends ViewController<LaunchScreen> {
             'password': password,
           }),
       ).then((ResponseObject responseObject) {
-        Logger.log(responseObject.jsonData, this);
+        widget.viewConfigs.debugConfigs?.logger.log('received response');
+        widget.viewConfigs.debugConfigs?.logger.log(responseObject.jsonData);
         setState(() {
           response = responseObject.toString();
-          Logger.log(response, this);
+          widget.viewConfigs.debugConfigs?.logger.log(response);
           loading = false;
         });
       });

@@ -1,7 +1,13 @@
 part of ui.components;
 
+class ViewConfigs {
+  final DebugConfigs? debugConfigs;
+  const ViewConfigs({this.debugConfigs});
+}
+
 abstract class View extends StatefulWidget {
-  const View({Key? key}) : super(key: key);
+  final ViewConfigs viewConfigs;
+  const View(this.viewConfigs, {Key? key}) : super(key: key);
 
   @override
   ViewController createState();

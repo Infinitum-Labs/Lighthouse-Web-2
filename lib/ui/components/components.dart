@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:lighthouse_web/core/core.dart';
-import 'package:lighthouse_web/ui/ui.dart';
+import 'package:lighthouse_web/toolbox/debugging/debugging.dart';
 
 part './atmosphere/atmospheric_controllers.dart';
 part './atmosphere/MVC.dart';
