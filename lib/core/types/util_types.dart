@@ -1,6 +1,6 @@
 part of core.types;
 
-/// No way I'm using `Map<String, dynamic>` for the entire project.
+/// A typedef for `Map<String, Object?>`
 typedef JSON = Map<String, dynamic>;
 
 /// `LogType` represents a semantic status of either:

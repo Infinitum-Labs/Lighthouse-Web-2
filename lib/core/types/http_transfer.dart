@@ -10,7 +10,9 @@ enum Slug {
 class RequestObject {
   final JSON jsonData;
 
-  const RequestObject(this.jsonData);
+  /// Either pass a complete [Map], or use an [emptyRequestMap] from `utils.dart`.
+  /// It conains the default keys such as 'headers', 'auth', 'jwt' set to empty values.
+  RequestObject(this.jsonData);
 
   String get jwtString => jsonData['headers']['auth']['jwt'];
   Slug get slug => jsonData['headers']['slug'];

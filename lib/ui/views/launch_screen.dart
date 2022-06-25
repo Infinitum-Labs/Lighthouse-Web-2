@@ -68,7 +68,18 @@ class _LaunchScreenVC extends ViewController<LaunchScreen> {
             ),
           if (loading)
             Center(
-              child: Text('Launching app... as\n$username\n$password'),
+              child: Column(
+                children: [
+                  //Text('Launching app... as\n$username\n$password'),
+                  IconButton(
+                    onPressed: (() {}),
+                    icon: const Icon(
+                      Icons.face,
+                      size: 20,
+                    ),
+                  ),
+                ],
+              ),
             ),
           if (!loading && dataImportTriggered)
             Center(

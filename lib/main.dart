@@ -7,29 +7,44 @@ import 'dart:html';
 
 void main() {
   window.document.onContextMenu.listen((e) => e.preventDefault());
-  window.onBeforeUnload.listen((e) {});
+  window.onBeforeUnload.listen((e) {
+    Vault.deinit();
+  });
   /////////////////////////////////////////
-  bool initialisedIdbFactory = Store.init();
-  LogDaemonClient logger = LogDaemonClient("http://127.0.0.1:8000");
-  logger.log("Hello from client");
+  // LogDaemonClient logger = LogDaemonClient("http://127.0.0.1:8000");
+  // logger.log("Hello from client");
   const ViewConfigs viewConfigs = ViewConfigs();
   /////////////////////////////////////////
+  Vault.init();
+  // Debug
+  final Workbench wb = Vault.create(
+    Workbench(
+      name: "My Amazing Workspace",
+      projects: ["proj1"],
+    ),
+  );
   runApp(
-    const App(
+    App(
       viewConfigs: viewConfigs,
+      devConfigs: {'objectId': wb.objectId},
     ),
   );
 }
 
 class App extends StatelessWidget {
   final ViewConfigs viewConfigs;
-  const App({required this.viewConfigs, Key? key}) : super(key: key);
+  final JSON devConfigs;
+  const App({
+    required this.viewConfigs,
+    this.devConfigs = const {},
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/launch',
+      initialRoute: '/dev',
       onUnknownRoute: (RouteSettings settings) {},
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) {
@@ -37,7 +52,8 @@ class App extends StatelessWidget {
         },
         '/launch': (BuildContext context) {
           return LaunchScreen(viewConfigs);
-        }
+        },
+        '/dev': (BuildContext context) => DevScreen(devConfigs['objectId']),
       },
     );
   }
