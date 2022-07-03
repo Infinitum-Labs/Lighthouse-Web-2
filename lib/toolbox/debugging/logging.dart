@@ -1,6 +1,10 @@
 part of toolbox.debugging;
 
-class LogDaemonClient {
+
+abstract class Logger {
+  void log(dynamic msg, [dynamic src = "<anon>"]);
+}
+/* class LogDaemonClient {
   final String serverAddr;
   LogDaemonClient(this.serverAddr);
 
@@ -12,9 +16,7 @@ class LogDaemonClient {
   }
 }
 
-abstract class Logger {
-  void log(dynamic msg, [dynamic src = "<anon>"]);
-}
+
 
 class DevLogger extends Logger {
   final VoidCallback _dumpAppCallback;
@@ -64,3 +66,4 @@ class FileLogger extends Logger {
     );
   }
 }
+ */

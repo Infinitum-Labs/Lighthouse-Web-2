@@ -2,6 +2,8 @@ library ui.views;
 
 import 'dart:html';
 
+import 'package:dio/dio.dart' as dio;
+
 import 'package:flutter/material.dart';
 import 'package:lighthouse_web/core/core.dart';
 import 'package:lighthouse_web/toolbox/debugging/debugging.dart';

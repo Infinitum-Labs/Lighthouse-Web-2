@@ -9,26 +9,36 @@ class DevScreen extends StatefulWidget {
 }
 
 class _DevScreenState extends State<DevScreen> {
+  String anyMsg = '';
   bool loaded = false;
   late LighthouseObject obj;
+  bool connectionSuccess = false;
 
   @override
   void initState() {
     super.initState();
-    Vault.get(widget.objectId).then(
+    /* Vault.get(widget.objectId).then(
       (value) => setState(() {
         obj = value;
-        loaded = true;
       }),
-    );
+    ); */
+
+    HttpClient.get(RequestObject(emptyRequestMap)).then((ResponseObject res) {
+      setState(() {
+        connectionSuccess = true;
+        loaded = true;
+        anyMsg = res.jsonData.toString();
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
+        child: SingleChildScrollView(
       child: loaded
-          ? Text(obj.json.toString())
+          ? Text(connectionSuccess.toString() + anyMsg)
           : const CircularProgressIndicator(),
-    );
+    ));
   }
 }

@@ -1,10 +1,10 @@
 library core.data_handling.transfer;
 
+import 'package:dio/dio.dart';
 import 'package:lighthouse_web/core/core.dart';
-import 'package:http/http.dart' as http;
+import 'dart:html';
 import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
 
 part './http_client.dart';
 part './synchroniser.dart';
