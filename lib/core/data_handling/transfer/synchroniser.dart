@@ -16,6 +16,7 @@ class Synchroniser {
   }
 
   static Future<void> performSync() async {
+    if (!(await HttpClient.testConnection())) {}
     Indexer.fetchDirtyObjects().then((List<LighthouseObject> objects) {
       if (objects.isEmpty) return;
       HttpClient.batchUpdate(

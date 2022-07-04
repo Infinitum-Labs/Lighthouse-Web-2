@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse_web/core/core.dart';
 import 'package:lighthouse_web/ui/components/components.dart';
 import 'package:lighthouse_web/ui/views/views.dart';
-import 'package:lighthouse_web/toolbox/toolbox.dart';
 import 'dart:html';
 
 void main() {
@@ -13,8 +12,12 @@ void main() {
   /////////////////////////////////////////
   // LogDaemonClient logger = LogDaemonClient("http://127.0.0.1:8000");
   // logger.log("Hello from client");
-  const ViewConfigs viewConfigs = ViewConfigs();
   /////////////////////////////////////////
+  const ViewConfigs viewConfigs = ViewConfigs();
+  const SatelliteStation satStation = SatelliteStation(
+    CommunicationSatellite(),
+    ObservatorySatellite(),
+  );
   Vault.init();
   // Debug
   final Workbench wb = Vault.create(
@@ -26,6 +29,7 @@ void main() {
   runApp(
     App(
       viewConfigs: viewConfigs,
+      satelliteStation: satStation,
       devConfigs: {'objectId': wb.objectId},
     ),
   );
@@ -34,8 +38,11 @@ void main() {
 class App extends StatelessWidget {
   final ViewConfigs viewConfigs;
   final JSON devConfigs;
+  final SatelliteStation satelliteStation;
+
   const App({
     required this.viewConfigs,
+    required this.satelliteStation,
     this.devConfigs = const {},
     Key? key,
   }) : super(key: key);
@@ -48,10 +55,10 @@ class App extends StatelessWidget {
       onUnknownRoute: (RouteSettings settings) {},
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) {
-          return LaunchScreen(viewConfigs);
+          return LaunchScreen(viewConfigs, satelliteStation);
         },
         '/launch': (BuildContext context) {
-          return LaunchScreen(viewConfigs);
+          return LaunchScreen(viewConfigs, satelliteStation);
         },
         '/dev': (BuildContext context) => DevScreen(devConfigs['objectId']),
       },

@@ -48,17 +48,21 @@ class HttpClient {
   ///
   /// When checking whether the user is offline, this method is called after
   static Future<bool> testConnection() async {
-    String result =
-        await HttpRequest.requestCrossOrigin(baseUrl + '/test', method: 'GET');
-    if (ResponseObject(jsonDecode(result)).statusCode == 200) {
-      return true;
-    } else {
-      return false;
+    // FUTURE: use connectivity package to check the type of connection, so that
+    // Synchroniser can throttle accordingly
+    late bool result;
+    try {
+      final response = await io.InternetAddress.lookup('example.com');
+      if (response.isNotEmpty) {
+        result = true;
+      }
+    } on io.SocketException catch (_) {
+      result = false;
     }
+    return result;
   }
 
   static void deinit() {}
-//https://stackoverflow.com/questions/49648022/check-whether-there-is-an-internet-connection-available-on-flutter-app
 
   static Future<ResponseObject> get(RequestObject requestObject) async {
     return handleResponse(

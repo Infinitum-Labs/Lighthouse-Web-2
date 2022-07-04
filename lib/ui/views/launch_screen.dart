@@ -1,8 +1,11 @@
 part of ui.views;
 
 class LaunchScreen extends View {
-  const LaunchScreen(ViewConfigs viewConfigs, {Key? key})
-      : super(viewConfigs, key: key);
+  const LaunchScreen(
+    ViewConfigs viewConfigs,
+    SatelliteStation satStation, {
+    Key? key,
+  }) : super(viewConfigs, satStation, key: key);
   @override
   ViewController<LaunchScreen> createState() => _LaunchScreenVC();
 }

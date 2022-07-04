@@ -1,4 +1,4 @@
-part of core.utils;
+part of core.utils.general;
 
 final void Function() emptyCallback = () {};
 const JSON emptyRequestMap = {
