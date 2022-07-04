@@ -17,11 +17,6 @@ class _DevScreenState extends State<DevScreen> {
   @override
   void initState() {
     super.initState();
-    /* Vault.get(widget.objectId).then(
-      (value) => setState(() {
-        obj = value;
-      }),
-    ); */
 
     HttpClient.get(RequestObject(emptyRequestMap)).then((ResponseObject res) {
       setState(() {

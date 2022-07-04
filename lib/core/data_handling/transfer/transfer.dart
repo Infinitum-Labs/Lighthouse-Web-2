@@ -1,6 +1,5 @@
 library core.data_handling.transfer;
 
-import 'package:dio/dio.dart';
 import 'package:lighthouse_web/core/core.dart';
 import 'dart:html';
 import 'dart:convert';
