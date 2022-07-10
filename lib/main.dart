@@ -14,23 +14,15 @@ void main() {
   // logger.log("Hello from client");
   /////////////////////////////////////////
   const ViewConfigs viewConfigs = ViewConfigs();
-  const SatelliteStation satStation = SatelliteStation(
+  SatelliteStation satStation = SatelliteStation(
     CommunicationSatellite(),
     ObservatorySatellite(),
   );
-  Vault.init();
-  // Debug
-  final Workbench wb = Vault.create(
-    Workbench(
-      name: "My Amazing Workspace",
-      projects: ["proj1"],
-    ),
-  );
+  Vault.init(satStation);
   runApp(
     App(
       viewConfigs: viewConfigs,
       satelliteStation: satStation,
-      devConfigs: {'objectId': wb.objectId},
     ),
   );
 }
@@ -60,7 +52,7 @@ class App extends StatelessWidget {
         '/launch': (BuildContext context) {
           return LaunchScreen(viewConfigs, satelliteStation);
         },
-        '/dev': (BuildContext context) => DevScreen(devConfigs['objectId']),
+        '/dev': (BuildContext context) => DevScreen(),
       },
     );
   }

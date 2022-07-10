@@ -27,9 +27,10 @@ class Indexer {
   /// into the [Vault], updates existing ones, and updates the [index] as well.
   static Future<void> loadSnapshot(Map<String, dynamic> payload) async {
     // String objectId: JSON {}
-    Utils.iterateOver<MapEntry<String, dynamic>>(payload.entries, (obj) {
-      index.putIfAbsent(obj.key, () => obj.value['revs'].last);
-      Vault.update(obj.key, obj.value);
+    Utils.iterateOver<MapEntry<String, dynamic>>(payload.entries, (entry) {
+      index.putIfAbsent(entry.key, () => entry.value['revs'].last);
+      final LighthouseObject lhObj = LighthouseObject.fromJSON(entry.value);
+      Vault.update(entry.key, lhObj);
     });
   }
 

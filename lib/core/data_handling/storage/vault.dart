@@ -8,6 +8,7 @@ part of core.data_handling.storage;
 /// in the DB in the next sync.
 /// [Learn more](https://coda.io/@lighthouse/lighthouse-developer-guidebook/vault-5)
 class Vault {
+  static late SatelliteStation _satelliteStation;
   static final Map<String, LighthouseObject> _cache = {};
   static final Map<String, LighthouseObject> _deletedObjectsCache = {};
 
@@ -18,7 +19,7 @@ class Vault {
   /// a HashTable, it is O(1) time complexity, making it suitable for lookups on
   /// moderate- to large-sized structures. [List], on the other hand, is O(n) time
   /// complexity and hence more suitable for smaller data structures.
-  static bool init() {
+  static bool init(SatelliteStation satStation) {
     /* if (!IdbFactory.supported) return false;
     IdbFactory idbFactory = getIdbFactory()!;
     idbFactory.open(
@@ -27,7 +28,7 @@ class Vault {
       onUpgradeNeeded: (VersionChangeEvent e) {},
     );
     return true; */
-    HttpClient.init();
+    HttpClient.init(satStation);
     Indexer.init();
     Synchroniser.init();
     return true;
@@ -39,14 +40,19 @@ class Vault {
     HttpClient.deinit();
   }
 
+  static bool contains(String objectId) =>
+      _cache.containsKey(objectId) ? true : false;
+
   /// Returns a reference to an object in cache.
   static Future<LighthouseObject> get(String objectId) async {
-    if (_cache.containsKey(objectId)) return _cache[objectId]!;
-    return HttpClient.get(
-      RequestObject({}),
+    if (contains(objectId)) return _cache[objectId]!;
+    // todo: check DB for object, throw if still not found
+    throw ObjectNotFound(objectId);
+    /* return HttpClient.get(
+      RequestObject(emptyRequestMap),
     ).then((ResponseObject responseObject) {
       return create(Workbench.fromJSON(responseObject.payload));
-    });
+    }); */
   }
 
   /// Adds the [LighthouseObject] to the Vault and returns it.
@@ -67,28 +73,52 @@ class Vault {
   /// ```dart
   /// LighthouseObject workbench = Workbench.fromJSON({});
   /// workbench.push(workbench.projects, "project #1");
-  /// Vault.update(workbench.objectId, workbench.json);
+  /// Vault.update(workbench.objectId, workbench);
   /// ```
-  static Future<LighthouseObject> update(String objectId, JSON json) async {
+  /// If properties need to be overwritten, the JSON values can be overwritten:
+  /// ```dart
+  /// LighthouseObject workbench = Workbench.fromJSON({});
+  /// workbench.json['property'] = 'value';
+  /// Vault.update(workbench.objectId, workbench);
+  /// ```
+  static Future update(String objectId, LighthouseObject newObj) async {
     return Vault.get(objectId).then((LighthouseObject obj) {
-      obj.json
-        ..clear()
-        ..addAll(json);
-      Indexer.markObjectAsDirty(obj.objectId);
-      return obj;
+      if (newObj.runtimeType == obj.runtimeType) {
+        final List<String> revs = obj.revisions;
+        final String id = obj.objectId;
+        obj.json
+          ..clear()
+          ..addAll(
+            newObj.json
+              ..update('id', (_) => id)
+              ..update('revs', (_) => revs),
+          );
+        Indexer.markObjectAsDirty(obj.objectId);
+        return obj;
+      } else {
+        throw OverwrittenObjectTypeMismatch(
+            objectId, obj.runtimeType, newObj.runtimeType);
+      }
     });
   }
 
   /// Moves the specified [LighthouseObject] from the [_cache] to the
-  /// [_deletedObjectsCache], updating the [Indexer]. This ensures that cache lookup
-  /// is not delayed by iterating over useless objects, while also preserving the
-  /// objects in case of reversion. [Learn more](https://github.com)
-  static Future<void> delete(String objectId) async {
+  /// [_deletedObjectsCache], updating the [Indexer] and returning the deleted object.
+  ///
+  /// This ensures that cache lookup is not delayed by iterating over useless objects,
+  /// while also preserving the objects in case of reversion. [Learn more](https://github.com)
+  static Future<LighthouseObject> delete(String objectId) async {
+    if (!contains(objectId)) throw ObjectNotFound(objectId);
     _deletedObjectsCache[objectId] = _cache.remove(objectId)!;
     Indexer.deletions.add(objectId);
+    return _deletedObjectsCache[objectId]!;
   }
 
+  /// Returns all the [LighthouseObject]s in the [_cache].
+  ///
+  /// Usually used by the [engines](github.com) to sort and organise the objects
+  /// for their respective purposes.
   static Future<List<LighthouseObject>> getAll() async {
-    return <LighthouseObject>[];
+    return _cache.values.toList();
   }
 }

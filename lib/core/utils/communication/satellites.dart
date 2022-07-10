@@ -7,14 +7,16 @@ abstract class Satellite {
 }
 
 class CommunicationSatellite extends Satellite {
-  const CommunicationSatellite() : super();
+  final StreamController stream = StreamController();
+  CommunicationSatellite() : super();
 
   @override
   void deinit() {}
 }
 
 class ObservatorySatellite extends Satellite {
-  const ObservatorySatellite() : super();
+  final StreamController stream = StreamController();
+  ObservatorySatellite() : super();
 
   @override
   void deinit() {}

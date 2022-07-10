@@ -38,16 +38,20 @@ class ResponseObject {
 }
 
 class HttpClient {
+  static late SatelliteStation _satelliteStation;
   static const bool _debugMode = false;
   static const String baseUrl =
       "https://infinitumlabsinc.editorx.io/lighthousecloud/_functions";
 
-  static void init() {}
+  static void init(SatelliteStation satStation) {
+    _satelliteStation = satStation;
+  }
 
   /// This test merely checks whether a connection can be established with the DB.
   ///
   /// When checking whether the user is offline, this method is called after
   static Future<bool> testConnection() async {
+    _satelliteStation.obsSat.stream.add('testConnection');
     // FUTURE: use connectivity package to check the type of connection, so that
     // Synchroniser can throttle accordingly
     late bool result;

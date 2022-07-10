@@ -1,7 +1,7 @@
 part of ui.components;
 
 class ViewConfigs {
-  final DebugConfigs? debugConfigs;
+  final dynamic debugConfigs;
   const ViewConfigs({this.debugConfigs});
 }
 
