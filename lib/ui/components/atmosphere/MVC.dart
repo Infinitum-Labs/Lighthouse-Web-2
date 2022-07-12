@@ -1,13 +1,14 @@
 part of ui.components;
 
 class ViewConfigs {
-  final DebugConfigs? debugConfigs;
+  final dynamic debugConfigs;
   const ViewConfigs({this.debugConfigs});
 }
 
 abstract class View extends StatefulWidget {
   final ViewConfigs viewConfigs;
-  const View(this.viewConfigs, {Key? key}) : super(key: key);
+  final SatelliteStation satStation;
+  const View(this.viewConfigs, this.satStation, {Key? key}) : super(key: key);
 
   @override
   ViewController createState();

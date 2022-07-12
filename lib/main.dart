@@ -2,42 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse_web/core/core.dart';
 import 'package:lighthouse_web/ui/components/components.dart';
 import 'package:lighthouse_web/ui/views/views.dart';
-import 'package:lighthouse_web/toolbox/toolbox.dart';
 import 'dart:html';
 
 void main() {
   window.document.onContextMenu.listen((e) => e.preventDefault());
-  window.onBeforeUnload.listen((e) {});
+  window.onBeforeUnload.listen((e) {
+    Vault.deinit();
+  });
   /////////////////////////////////////////
-  bool initialisedIdbFactory = Store.init();
-  LogDaemonClient logger = LogDaemonClient("http://127.0.0.1:8000");
-  logger.log("Hello from client");
+  // LogDaemonClient logger = LogDaemonClient("http://127.0.0.1:8000");
+  // logger.log("Hello from client");
+  /////////////////////////////////////////
   const ViewConfigs viewConfigs = ViewConfigs();
-  /////////////////////////////////////////
+  SatelliteStation satStation = SatelliteStation(
+    CommunicationSatellite(),
+    ObservatorySatellite(),
+  );
+  Vault.init(satStation);
   runApp(
-    const App(
+    App(
       viewConfigs: viewConfigs,
+      satelliteStation: satStation,
     ),
   );
 }
 
 class App extends StatelessWidget {
   final ViewConfigs viewConfigs;
-  const App({required this.viewConfigs, Key? key}) : super(key: key);
+  final JSON devConfigs;
+  final SatelliteStation satelliteStation;
+
+  const App({
+    required this.viewConfigs,
+    required this.satelliteStation,
+    this.devConfigs = const {},
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/launch',
+      initialRoute: '/dev',
       onUnknownRoute: (RouteSettings settings) {},
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) {
-          return LaunchScreen(viewConfigs);
+          return LaunchScreen(viewConfigs, satelliteStation);
         },
         '/launch': (BuildContext context) {
-          return LaunchScreen(viewConfigs);
-        }
+          return LaunchScreen(viewConfigs, satelliteStation);
+        },
+        '/dev': (BuildContext context) => DevScreen(),
       },
     );
   }

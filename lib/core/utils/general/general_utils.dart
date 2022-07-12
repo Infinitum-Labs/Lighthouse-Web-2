@@ -1,13 +1,26 @@
-part of core.utils;
+part of core.utils.general;
 
 final void Function() emptyCallback = () {};
-final JSON emptyRequestMap = {
+const JSON emptyRequestMap = {
   'headers': {
     'auth': {'jwt': ''},
     'slug': ''
   },
   'body': {'payload': {}}
 };
+const JSON emptyLighthouseObjectMap = {
+  'revs': [],
+  'id': '',
+};
+
+class Utils {
+  static void iterateOver<T>(Iterable<T> iterable, Function(T obj) callback) {
+    final int length = iterable.length;
+    for (int i = 0; i < length; i++) {
+      callback(iterable.elementAt(i));
+    }
+  }
+}
 
 class ObjectId {
   static const String _chars = 'abcdefghijklmnopqrstuvwxyz1234567890';
