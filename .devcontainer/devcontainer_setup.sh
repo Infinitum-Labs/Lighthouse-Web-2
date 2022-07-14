@@ -1,6 +1,7 @@
 git clone https://github.com/flutter/flutter.git
 sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
-echo 'export PATH="$PATH:`pwd`/flutter/bin"' >> $HOME/.bashrc
+export PATH="$PATH:`pwd`/flutter/bin"
+flutter
 which flutter dart
 # Install Dart and Flutter extensions
 flutter doctor

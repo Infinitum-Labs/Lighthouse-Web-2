@@ -1,6 +1,5 @@
 library ui.views;
 
-import 'dart:html';
 import 'dart:async';
 
 import 'package:flutter/material.dart';

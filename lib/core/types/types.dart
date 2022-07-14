@@ -1,8 +1,5 @@
 library core.types;
 
-import 'dart:html';
-import 'package:flutter/material.dart';
-
 import '../utils/utils.dart';
 
 part './atmospheric_data.dart';

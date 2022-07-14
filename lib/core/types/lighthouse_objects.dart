@@ -9,6 +9,34 @@ enum DependencyRelation {
   isBlockedBy,
 }
 
+/// The 6 main states of a task, as defined in the
+/// [Lighthouse Principles Guidebook](github.com)
+enum TaskState {
+  inbox,
+  triaged,
+  scheduled,
+  underway,
+  archived,
+  future,
+}
+
+/// The main Prototype types, as defined in the [Lighthouse Prototype Guide](github.com)
+enum Archetype {
+  keybind,
+  wizcommand,
+  workflow,
+  observatory,
+}
+
+/// The 4 main Lighthouse access modes, as discussed in the [Lighthouse Guidebook](github.com)
+enum AccessType {
+  developer,
+  tester,
+  beta_tester,
+  sandbox,
+  standard,
+}
+
 ////////////////////
 // LighthouseObjects
 ////////////////////
@@ -77,6 +105,49 @@ abstract class SubObject extends LighthouseObject {
 
 class User extends CoreObject {
   User(JSON json) : super(json, 'u');
+
+  DateTime get created => json['created'];
+  set created(DateTime value) => json['created'] = value;
+}
+
+class AccessCard extends CoreObject {
+  AccessCard(JSON json) : super(json, 'ac');
+
+  String get accessId => json['accessId'];
+  set accessId(String value) => json['accessId'] = value;
+
+  DateTime get created => DateTime.parse(json['created']);
+  set created(DateTime value) => json['created'] = value.toIso8601String();
+
+  bool get accessCardIsValid => json['accessCardIsValid'];
+  set accessCardIsValid(bool value) => json['accessCardIsValid'] = value;
+
+  String get licenseInvalidityReason => json['licenseInvalidityReason'];
+  set licenseInvalidityReason(String value) =>
+      json['licenseInvalidityReason'] = value;
+
+  AccessType get accessType =>
+      json['accessType'].toString().parseTo<AccessType>();
+  set accessType(AccessType value) => json['accessType'] = value.name;
+
+  int get contributionScore => json['contributionScore'];
+  set contributionScore(int value) => json['contributionScore'] = value;
+
+  String get displayName => json['displayName'];
+  set displayName(String value) => json['displayName'] = value;
+
+  String get emailAddress => json['emailAddress'];
+  set emailAddress(String value) => json['emailAddress'] = value;
+
+  String get password => json['password'];
+  set password(String value) => json['password'] = value;
+
+  List<String> get permissions => List<String>.from(json['permissions']);
+
+  List<String> get remarks => List<String>.from(json['remarks']);
+
+  String get workbench => json['workbench'];
+  set workbench(String value) => json['workbench'] = value;
 }
 
 class Workbench extends CoreObject {
@@ -91,7 +162,19 @@ class Workbench extends CoreObject {
         }, 'wb');
   Workbench.fromJSON(JSON json) : super(json, 'wb');
 
-  List<String> get projects => json['projects'];
+  List<String> get goals => List<String>.from(json['goals']);
+
+  List<String> get projects => List<String>.from(json['projects']);
+
+  List<String> get prototypes => List<String>.from(json['prototypes']);
+
+  List<String> get contextConstraints =>
+      List<String>.from(json['contextConstraints']);
+
+  List<Ticket> get tickets =>
+      List.from(json['tickets']).map((e) => Ticket(e)).toList();
+
+  List<String> get binItems => List<String>.from(json['binItems']);
 
   bool get isDefault => json['default'].parseBool();
 }
@@ -122,22 +205,125 @@ class Project extends CoreObject {
 
 class Epic extends CoreObject {
   Epic(JSON json) : super(json, 'e');
+
+  String get name => json['name'];
+  set name(String value) => json['name'] = value;
+
+  String get objective => json['objective'];
+  set objective(String value) => json['objective'] = value;
+
+  List<String> get tasks => List<String>.from(json['tasks']);
+
+  DateTime get due => DateTime.parse(json['due']);
+  set due(DateTime value) => json['due'] = value.toIso8601String();
 }
 
 class Task extends CoreObject {
   Task(JSON json) : super(json, 't');
+
+  String get name => json['name'];
+  set name(String value) => json['name'] = value;
+
+  String get notes => json['notes'];
+  set notes(String value) => json['notes'] = value;
+
+  Schedule get schedule => Schedule(json['schedule']);
+  set schedule(Schedule value) => json['schedule'] = value.json;
+
+  List<String> get goals => List<String>.from(json['goals']);
+  List<String> get subtasks => List<String>.from(json['subtasks']);
+  List<String> get assignees => List<String>.from(json['assignees']);
+  List<String> get comments => List<String>.from(json['comments']);
+  List<String> get issues => List<String>.from(json['issues']);
+  List<String> get documents => List<String>.from(json['documents']);
+
+  double get priority => json['priority'];
+  set priority(double value) => json['priority'] = value;
+
+  TaskState get state => json['state'].toString().parseTo<TaskState>();
+  set state(TaskState value) => json['state'] = value.name;
+
+  List<Map<DependencyRelation, List<String>>> get dependencies =>
+      List<Map>.from(json['dependencies'])
+          .map(
+            (Map m) => <DependencyRelation, List<String>>{
+              m.keys.first.toString().parseTo<DependencyRelation>():
+                  List<String>.from(m.values.first),
+            },
+          )
+          .toList();
+
+  List<MetaTag> get metaTags =>
+      List.from(json['metaTags']).map((e) => MetaTag(e)).toList();
 }
 
 class Event extends CoreObject {
   Event(JSON json) : super(json, 'e');
+
+  String get name => json['name'];
+  set name(String value) => json['name'] = value;
+
+  String get notes => json['notes'];
+  set notes(String value) => json['notes'] = value;
+
+  Schedule get schedule => json['schedule'];
+  set schedule(Schedule value) => json['schedule'] = value;
+
+  List<String> get tasks => List<String>.from(json['tasks']);
+
+  List<Anchor> get anchors =>
+      List.from(json['anchors']).map((e) => Anchor(e)).toList();
 }
 
 class Document extends CoreObject {
   Document(JSON json) : super(json, 'd');
+
+  String get name => json['name'];
+  set name(String value) => json['name'] = value;
+
+  String get description => json['description'];
+  set description(String value) => json['description'] = value;
+
+  DateTime get created => DateTime.parse(json['created']);
+  set created(DateTime value) => json['created'] = value.toIso8601String();
+
+  DateTime get lastUpdated => DateTime.parse(json['lastUpdated']);
+  set lastUpdated(DateTime value) =>
+      json['lastUpdated'] = value.toIso8601String();
+
+  String get lastModifier => json['lastModifier'];
+  set lastModifier(String value) => json['lastModifier'] = value;
+
+  List<Map<String, List<String>>> get sharingPermissions =>
+      List<Map<String, List<String>>>.from(json['sharingPermissions']);
+
+  String get source => json['source'];
+  set source(String value) => json['source'] = value;
 }
 
 class Prototype extends CoreObject {
   Prototype(JSON json) : super(json, 'pt');
+
+  String get name => json['name'];
+  set name(String value) => json['name'] = value;
+
+  String get description => json['description'];
+  set description(String value) => json['description'] = value;
+
+  Archetype get archetype => json['archetype'].toString().parseTo<Archetype>();
+  set archetype(Archetype value) => json['archetype'] = value.name;
+
+  DeploymentConfigs get deploymentConfigs => json['deploymentConfigs'];
+  set deploymentConfigs(DeploymentConfigs value) =>
+      json['deploymentConfigs'] = value.json;
+
+  Observatory get observatory => json['observatory'];
+  set observatory(Observatory value) => json['observatory'] = value.json;
+
+  String get source => json['source'];
+  set source(String value) => json['source'] = value;
+
+  void execute(DeploymentConfigs deploymentConfigs) {}
 }
 
 class Issue extends CoreObject {
@@ -148,13 +334,25 @@ class Message extends CoreObject {
   Message(JSON json) : super(json, 'm');
 }
 
+class Observatory extends CoreObject {
+  Observatory(JSON json) : super(json, 'ob');
+}
+
+class Ticket extends CoreObject {
+  Ticket(JSON json) : super(json, 't');
+}
+
+class ContextConstraint extends CoreObject {
+  ContextConstraint(JSON json) : super(json, 'cc');
+}
+
+class MetaTag extends SubObject {
+  MetaTag(JSON json) : super(json, 'mt');
+}
+
 ////////////////////
 // SubObjects
 ////////////////////
-
-class ContextConstraint extends SubObject {
-  ContextConstraint(JSON json) : super(json, 'cc');
-}
 
 class Anchor extends SubObject {
   Anchor(JSON json) : super(json, 'an');
@@ -162,6 +360,10 @@ class Anchor extends SubObject {
 
 class Schedule extends SubObject {
   Schedule(JSON json) : super(json, 'sc');
+}
+
+class DeploymentConfigs extends SubObject {
+  DeploymentConfigs(JSON json) : super(json, 'de');
 }
 
 /**

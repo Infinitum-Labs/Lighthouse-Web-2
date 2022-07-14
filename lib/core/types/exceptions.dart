@@ -13,6 +13,10 @@ abstract class LighthouseObjectException extends LighthouseException {
   const LighthouseObjectException(String msg) : super(msg);
 }
 
+abstract class UtilityException extends LighthouseException {
+  const UtilityException(String msg) : super(msg);
+}
+
 class ObjectNotFound extends VaultException {
   final String obejctId;
   const ObjectNotFound(this.obejctId)
@@ -35,4 +39,10 @@ class InvalidType extends LighthouseObjectException {
   const InvalidType(this.objectId, this.inferenceSource)
       : super(
             "Could not detect the type of the Lighthouse Object as it is invalid.");
+}
+
+class TypeCastError extends UtilityException {
+  final Type fromType;
+  final Type toType;
+  const TypeCastError(this.fromType, this.toType, msg) : super(msg);
 }

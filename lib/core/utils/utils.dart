@@ -1,6 +1,11 @@
 library core.utils;
 
-export './communication/communication.dart';
+export './communication/communication.dart'
+    show
+        Satellite,
+        SatelliteStation,
+        CommunicationSatellite,
+        ObservatorySatellite;
 export './general/general.dart'
     show
         Utils,
