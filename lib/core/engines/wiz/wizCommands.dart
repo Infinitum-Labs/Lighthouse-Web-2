@@ -1,4 +1,4 @@
-part of wiz;
+part of core.engines.wiz;
 
 class Command {
   final String root;

@@ -1,4 +1,4 @@
-part of wiz;
+part of core.engines.wiz;
 
 abstract class CommandHandler {
   WizResult handle(Command cmd);

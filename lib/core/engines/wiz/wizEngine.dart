@@ -1,4 +1,4 @@
-part of wiz;
+part of core.engines.wiz;
 
 enum TokenType {
   identifier,
@@ -194,6 +194,10 @@ class Parser {
         ),
         Flags(),
       );
+  
+  Command parse2() {
+    
+  }
 }
 
 class Interpreter {

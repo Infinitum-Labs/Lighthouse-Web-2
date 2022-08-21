@@ -1,6 +1,5 @@
-library wiz;
+library core.engines.wiz;
 
-import '../../utils/utils.dart';
 import '../../types/types.dart';
 
 part 'wizEngine.dart';
