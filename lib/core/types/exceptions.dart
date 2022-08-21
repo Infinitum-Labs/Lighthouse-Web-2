@@ -6,7 +6,7 @@ abstract class LighthouseException implements Exception {
 }
 
 abstract class VaultException extends LighthouseException {
-  const VaultException(String msg) : super(msg);
+  const VaultException(super.msg);
 }
 
 abstract class LighthouseObjectException extends LighthouseException {
@@ -14,7 +14,33 @@ abstract class LighthouseObjectException extends LighthouseException {
 }
 
 abstract class UtilityException extends LighthouseException {
-  const UtilityException(String msg) : super(msg);
+  const UtilityException(super.msg);
+}
+
+abstract class DBError extends LighthouseException {
+  final int statusCode;
+  final JSON request;
+  const DBError(this.request, msg, this.statusCode) : super(msg);
+
+  static DBError? fromJSON(JSON json) {
+    switch (json['code']) {
+      case 400:
+        return BadRequest_400(json['request'], json['msg'], json['statusCode']);
+      case 503:
+        return ServiceUnavailable_503(
+            json['request'], json['msg'], json['statusCode']);
+      default:
+        return null;
+    }
+  }
+}
+
+class BadRequest_400 extends DBError {
+  const BadRequest_400(super.request, super.msg, super.statusCode);
+}
+
+class ServiceUnavailable_503 extends DBError {
+  const ServiceUnavailable_503(super.request, super.msg, super.statusCode);
 }
 
 class ObjectNotFound extends VaultException {
@@ -44,5 +70,5 @@ class InvalidType extends LighthouseObjectException {
 class TypeCastError extends UtilityException {
   final Type fromType;
   final Type toType;
-  const TypeCastError(this.fromType, this.toType, msg) : super(msg);
+  const TypeCastError(this.fromType, this.toType, super.msg);
 }

@@ -1,5 +1,7 @@
 library core.types;
 
+import 'package:flutter/scheduler.dart';
+
 import '../utils/utils.dart';
 
 part './atmospheric_data.dart';

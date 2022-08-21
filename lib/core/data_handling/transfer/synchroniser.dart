@@ -3,9 +3,10 @@ part of core.data_handling.transfer;
 /// The [Synchroniser] ensures that the [Vault] and DB synchronise their data
 /// regularly. It also takes care of situations where the user is offline.
 class Synchroniser {
+  /// The rate, in seconds, at which polling is done.
+  static int pollRate = 30;
   static final Timer _timer = Timer.periodic(
-    const Duration(seconds: 30),
-    (Timer t) {},
+    Duration(seconds: pollRate), (Timer t) => null, //performSync(),
   );
 
   static void init() {}

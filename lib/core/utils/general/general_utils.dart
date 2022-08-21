@@ -1,14 +1,16 @@
 part of core.utils.general;
 
 final void Function() emptyCallback = () {};
-const JSON emptyRequestMap = {
+final JSON emptyRequestMap = {
   'headers': {
-    'auth': {'jwt': ''},
-    'slug': ''
+    'Authorization': '',
+    'slug': '',
+    'origin':
+        'https://obsidian418-infinitum-labs-lighthouse-web-5gp5rgqwq299q-8084.githubpreview.dev'
   },
   'body': {'payload': {}}
 };
-const JSON emptyLighthouseObjectMap = {
+final JSON emptyLighthouseObjectMap = {
   'revs': [],
   'id': '',
 };

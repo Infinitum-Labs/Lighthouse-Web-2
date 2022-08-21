@@ -1,6 +1,6 @@
 part of core.types;
 
-/// A typedef for `Map<String, Object?>`
+/// A typedef for [Map<String, dynamic>]
 typedef JSON = Map<String, dynamic>;
 
 /// `LogType` represents a semantic status of either:

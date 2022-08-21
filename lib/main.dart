@@ -9,6 +9,8 @@ void main() {
   window.onBeforeUnload.listen((e) {
     Vault.deinit();
   });
+  // UPGRADE: https://dart.dev/guides/language/language-tour#super-parameters
+  // UPGRADE: https://dart.dev/guides/language/language-tour#declaring-enhanced-enums
   /////////////////////////////////////////
   // LogDaemonClient logger = LogDaemonClient("http://127.0.0.1:8000");
   // logger.log("Hello from client");
@@ -43,7 +45,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/dev',
+      initialRoute: '/data',
       onUnknownRoute: (RouteSettings settings) {},
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) {
@@ -52,6 +54,8 @@ class App extends StatelessWidget {
         '/launch': (BuildContext context) {
           return LaunchScreen(viewConfigs, satelliteStation);
         },
+        '/data': (BuildContext context) =>
+            DataView(viewConfigs, satelliteStation),
         '/dev': (BuildContext context) => DevScreen(),
       },
     );
