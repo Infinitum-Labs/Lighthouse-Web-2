@@ -1,7 +1,5 @@
 {
-
     "configurations": [
-        
         {
             "name": "Flutter",
             "type": "dart",
@@ -9,8 +7,21 @@
             "flutterMode": "debug",
             "program": "lib/main.dart",
             "args": [
-                "-d", "web-server", "--web-hostname", "127.0.0.1", "--web-port", "8084"
+                "-d",
+                "web-server",
+                "--web-hostname",
+                "127.0.0.1",
+                "--web-port",
+                "8084"
             ]
+        },
+        {
+            "name": "contextEngine",
+            "type": "dart",
+            "request": "launch",
+            "flutterMode": "debug",
+            "program": "lib/core/engines/context/tests/testMatch.dart",
+            "args": []
         }
     ]
 }

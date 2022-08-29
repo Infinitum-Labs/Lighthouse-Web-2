@@ -1,4 +1,61 @@
-part of core.engines.wiz;
+enum LogType {
+  log,
+  warn,
+  info,
+  err,
+}
+
+abstract class CommandHandler {
+  WizResult handle(Command cmd);
+}
+
+class _Test implements CommandHandler {
+  const _Test();
+  @override
+  WizResult handle(Command cmd) =>
+      WizResult.success(cmd.args.positionalArgs.first);
+}
+
+class Command {
+  final String root;
+  final List<String> subcommands;
+  final Args args;
+  final Flags flags;
+
+  const Command(this.root, this.subcommands, this.args, this.flags);
+}
+
+class Args {
+  final List<String> positionalArgs;
+  final Map<String, String> namedArgs;
+
+  const Args({this.positionalArgs = const [], this.namedArgs = const {}});
+}
+
+class Flags {
+  final Map<String, String> globalFlags;
+  final Map<String, String> localFlags;
+
+  const Flags({this.globalFlags = const {}, this.localFlags = const {}});
+}
+
+class WizResult {
+  late String msg;
+  late LogType logType;
+
+  WizResult(this.logType, this.msg);
+
+  WizResult.success(String? completionMsg) {
+    logType = LogType.log;
+    msg = completionMsg ?? 'done';
+  }
+
+  WizResult.commandNotFound(Command cmd) {
+    logType = LogType.err;
+    msg =
+        "The command root '${cmd.root}' does not have a CommandHandler defined.";
+  }
+}
 
 enum TokenType {
   identifier,
@@ -177,6 +234,8 @@ class Token {
     this.literal,
   });
 
+  bool get isEOF => tokenType == TokenType.eof;
+
   @override
   String toString() =>
       "'$lexeme': $tokenType ${literal ?? ''} [$lineNo:$start]";
@@ -184,18 +243,27 @@ class Token {
 
 class Parser {
   final List<Token> tokens;
+  int cursor = 0;
+  late Token root;
+  final List<Token> subcommands = [];
+  final List<Token> posArgs = [];
+  final Map<String, List<Token>> namedArgs = {};
+  final List<Token> lFlags = [];
+  final List<Token> gFlags = [];
   Parser(this.tokens);
 
-  Command parse_dummy() => const Command(
-        'test',
-        <String>[],
-        Args(
-          positionalArgs: <String>['hello'],
-        ),
-        Flags(),
-      );
-
   Command parse() {
+    if (tokens.isEmpty) throw Exception("EMPTY COMMAND");
+    root = consume(TokenType.identifier);
+    while (match([TokenType.identifier])) {
+      subcommands.add(previous());
+    }
+    while (match([TokenType.string])) {
+      posArgs.add(previous());
+    }
+    parseNamedArgsOrFlags();
+
+    print([root, subcommands, namedArgs, posArgs, lFlags, gFlags].join('\n\n'));
     return const Command(
       'test',
       <String>[],
@@ -205,6 +273,69 @@ class Parser {
       Flags(),
     );
   }
+
+  void parseNamedArgsOrFlags() {
+    while (
+        ![TokenType.minus, TokenType.minus_minus].contains(peek().tokenType)) {
+      namedArgs[consume(TokenType.identifier).lexeme] = parseNamedArg();
+    }
+    while (!match([TokenType.eof])) {
+      if (match([TokenType.minus])) {
+        lFlags.add(parseFlag());
+      } else if (match([TokenType.minus_minus])) {
+        gFlags.add(parseFlag());
+      } else {
+        parseNamedArgsOrFlags();
+      }
+    }
+  }
+
+  Token parseFlag() {
+    if (match([TokenType.identifier])) return previous();
+    throw Exception("flag name must be an identifier");
+  }
+
+  List<Token> parseNamedArg() {
+    final List<Token> args = [];
+    consume(TokenType.colon);
+    while (!match([TokenType.semicolon])) {
+      if (match([TokenType.identifier]) || match([TokenType.string])) {
+        args.add(previous());
+      } else {
+        if (peek().tokenType == TokenType.minus ||
+            peek().tokenType == TokenType.colon) {
+          throw Exception("Terminate named arguments with ';'");
+        } else {
+          throw Exception(
+              "Pass either identifier or string as argument: ${consume(previous().tokenType).lexeme}");
+        }
+      }
+    }
+    return args;
+  }
+
+  Token previous() => tokens[cursor - 1];
+
+  bool match(List<TokenType> types) {
+    if (types.contains(peek().tokenType)) {
+      consume(peek().tokenType);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Token peek([int lookahead = 0]) {
+    if (cursor + lookahead < tokens.length) {
+      return tokens[cursor + lookahead];
+    } else {
+      return Token(TokenType.eof, 'EOF', lineNo: 0, start: 0);
+    }
+  }
+
+  Token consume(TokenType type) => cursor == tokens.length
+      ? throw Exception("$type expected")
+      : tokens[cursor++];
 }
 
 class Interpreter {
@@ -357,3 +488,8 @@ extension StringUtils on String {
 // b: b1;
 // --G
 // -L
+
+void main() {
+  final String src = """wiz create proj \"aaa\" \"bbb\" val:true; --F -V""";
+  (Parser(Tokeniser(src).tokenise()).parse());
+}
